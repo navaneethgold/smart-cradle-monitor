@@ -4,13 +4,13 @@
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "express-session": "^1.18.2",
+    "firebase": "^12.2.1",
     "mongoose": "^8.18.0"
   },
   "type": "module",
   "name": "backend",
   "version": "1.0.0",
   "main": "server.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",

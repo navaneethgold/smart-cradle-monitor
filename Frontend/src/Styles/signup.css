@@ -1,0 +1,69 @@
+/* Container styling */
+.signup-container {
+  width: 100%;
+  max-width: 400px;
+  margin: 80px auto;
+  padding: 30px;
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0px 4px 15px rgba(0,0,0,0.1);
+  text-align: center;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Heading */
+.signup-container h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+/* Form */
+.signup-form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Input fields */
+.signup-form input {
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  transition: border 0.3s ease;
+}
+
+.signup-form input:focus {
+  border: 1px solid #007bff;
+}
+
+/* Button */
+.signup-form button {
+  padding: 12px;
+  border: none;
+  background: #007bff;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.signup-form button:hover {
+  background: #0056b3;
+}
+
+/* Error and success messages */
+.error-text {
+  color: red;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.success-text {
+  color: green;
+  margin-top: 10px;
+  font-size: 14px;
+}
