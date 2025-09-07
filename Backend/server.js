@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import cors from "cors";
 import session from 'express-session';
-import { db } from './config/fireBase';
+import { db } from './config/fireBase.js';
 import express from 'express';
 const app=express();
 app.use(express.json());
@@ -53,8 +53,40 @@ app.post("/blynk-data", (req, res) => {
   .catch((err) => res.status(500).json({ error: err.message }));
 });
 
-app.listen(port,()=>{
-  console.log("Server started at port ",port)
+app.post("/api/test", async (req, res) => {
+  try {
+    const { temperature, humidity } = req.body;
+
+    // Push to Firebase under /testData
+    const ref = db.ref("testData").push();
+    await ref.set({
+      temperature,
+      humidity,
+      timestamp: Date.now()
+    });
+
+    res.status(200).json({ message: "Data added!", id: ref.key });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
+// server.js (Express route to fetch all test data)
+app.get("/api/test", async (req, res) => {
+  try {
+    const snapshot = await db.ref("testData").once("value");
+    const data = snapshot.val();
+    res.status(200).json(data || {});
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Error fetching data" });
+  }
+});
+
+
+app.listen(port, () => {
+  console.log("Server started at port ", port);
 });
 
 
