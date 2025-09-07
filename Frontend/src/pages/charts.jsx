@@ -5,7 +5,7 @@ const Chart = ({ data }) => {
   const sorted = [...data].sort((a, b) => a.timestamp - b.timestamp);
 
   return (
-    <LineChart width={600} height={300} data={sorted}>
+    <LineChart width={850} height={300} data={sorted}>
       <CartesianGrid strokeDasharray="3 3" />
       <XAxis dataKey="timestamp" tickFormatter={(t) => new Date(t).toLocaleTimeString()} />
       <YAxis />

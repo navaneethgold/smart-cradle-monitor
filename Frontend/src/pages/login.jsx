@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import "../Styles/signup.css";
 import { useAuth } from "../contexts/Authentication";
 import { useNavigate } from "react-router-dom";
+import {notify} from "../Features/toastManager.jsx"
+import ToastManager from "../Features/toastManager.jsx";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -10,18 +12,21 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-
+  const notifySuccess = (msg) => notify.success(msg);
+  const notifyError = (msg) => notify.error(msg);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
     try {
       await login(email, password);
-      setSuccess("Logged in successfully 🎉");
+      notifySuccess("Logged in successfully 🎉");
+      navigate("/visualisation");
       setEmail("");
       setPassword("");
     } catch (err) {
       setError(err.message);
+      notifyError(err.message);
     }
   };
 
@@ -31,9 +36,12 @@ const Login = () => {
     try {
       const result = await loginWithGoogle();
       setSuccess(`Welcome ${result.user.displayName} 🎉`);
+      notifySuccess(`Welcome ${result.user.displayName} 🎉`);
       console.log("Google user:", result.user);
+      navigate("/visualisation");
     } catch (err) {
       setError(err.message);
+      notifyError(err.message);
     }
   };
 
@@ -82,7 +90,7 @@ const Login = () => {
         <button
           type="button"
           className="guest-btn"
-          onClick={() => (window.location.href = "/visualisation")}
+          onClick={() => navigate("/visualisation")}
         >
           Continue as Guest
         </button>

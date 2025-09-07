@@ -4,11 +4,14 @@ import { app } from "../fireBase.js"; // your firebaseConfig file
 import axios from "axios";
 import Chart from "./charts.jsx";
 import { useAuth } from "../contexts/Authentication";
+import "../Styles/Visualisation.css";
+import { useNavigate } from "react-router-dom";
 
 // Initialize Realtime Database and get a reference to the service
 
 const db = getDatabase(app);
 const DataViewer = () => {
+  const navigate = useNavigate();
   const { user, logout } = useAuth();
   const [data, setData] = useState([]);
   const [temperature, setTemperature] = useState("");
@@ -51,14 +54,33 @@ const DataViewer = () => {
   }, []);
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h1>Welcome, {user ? user.displayName || user.email : "Guest"}</h1>
-      <button onClick={logout}>LogOut</button>
-      <div style={{ padding: "20px" }}>
-        <h1>Test Page</h1>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
+    <div className="dashboard-page">
+      <div className="dashboard-card">
+        <div className="header-page">
+          <h1 className="welcome-text">
+            Welcome, {user ? user.displayName || user.email : "Guest"}
+          </h1>
+          <div className="header-buts">
+            {user ? (
+              <button onClick={logout} className="logout-btn">
+                Log Out
+              </button>
+            ) : (<>
+              <button onClick={() => navigate("/login")} className="logout-btn">
+                Log In
+              </button>
+              <button onClick={() => navigate("/signUp")} className="logout-btn">
+                Sign Up
+              </button></>
+            )}
+          </div>
+        </div>
+    
+        <div className="test-card">
+          <h2>Test Page</h2>
+          <form onSubmit={handleSubmit} className="test-form">
+            <input
+              type="text"
               placeholder="Temperature"
               value={temperature}
               onChange={(e) => setTemperature(e.target.value)}
@@ -71,13 +93,18 @@ const DataViewer = () => {
               onChange={(e) => setHumidity(e.target.value)}
               required
             />
-            <button type="submit">Send</button>
+            <button type="submit" className="send-btn">Send</button>
           </form>
-          {response && <p>{response}</p>}
+          {response && <p className="response-msg">{response}</p>}
         </div>
-      <h2>Live Firebase Data</h2>
-      <Chart data={data} />
+      
+        <h2 className="live-data-title">📊 Live Firebase Data</h2>
+        <div className="chart-container">
+          <Chart data={data} />
+        </div>
+      </div>
     </div>
+    
   );
 };
 

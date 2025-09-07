@@ -79,7 +79,7 @@ const Signup = () => {
       <button
           type="button"
           className="guest-btn"
-          onClick={() => (window.location.href = "/visualisation")}
+          onClick={() => navigate("/visualisation")}
         >
           Continue as Guest
         </button>
