@@ -1,8 +1,11 @@
 import React, { useState } from "react";
-import { signup } from "./Authentication";
+import { useAuth } from "../contexts/Authentication";
 import "../Styles/signup.css"
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
+  const navigate = useNavigate();
+  const { signup,loginWithGoogle } = useAuth(); // email/pass signup function
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -21,8 +24,20 @@ const Signup = () => {
       setError(err.message);
     }
   };
+    const handleGoogleSubmit = async () => {
+    setError("");
+    setSuccess("");
+    try {
+      const result = await loginWithGoogle();
+      setSuccess(`Welcome ${result.user.displayName} 🎉`);
+      console.log("Google user:", result.user);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
 
   return (
+    <div className="login-page">
     <div className="signup-container">
       <h2>Create Account</h2>
       <form className="signup-form" onSubmit={handleSubmit}>
@@ -33,7 +48,7 @@ const Signup = () => {
           onChange={(e) => setEmail(e.target.value)}
           required
         />
-
+  
         <input
           type="password"
           placeholder="Enter Password"
@@ -42,13 +57,47 @@ const Signup = () => {
           required
         />
 
-        <button type="submit">Sign Up</button>
+        <button type="submit" className="login-btn">Sign Up</button>
+        <div className="divider">
+            <span>OR</span>
+          </div>
 
+          <button
+            type="button"
+            onClick={handleGoogleSubmit}
+            className="google-btn"
+          >
+            <img
+              src="https://www.svgrepo.com/show/355037/google.svg"
+              alt="Google"
+            />
+            Login with Google
+          </button>
         {error && <p className="error-text">{error}</p>}
         {success && <p className="success-text">{success}</p>}
       </form>
+      <button
+          type="button"
+          className="guest-btn"
+          onClick={() => (window.location.href = "/visualisation")}
+        >
+          Continue as Guest
+        </button>
+          
+        {/* Signup Link */}
+        <p className="redirect-text">
+          Don’t have an account?{" "}
+          <span
+            className="redirect-link"
+            onClick={() => navigate("/login")}
+          >
+            Log In
+          </span>
+        </p>
+    </div>
     </div>
   );
+
 };
 
 export default Signup;

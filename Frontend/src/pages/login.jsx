@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { login } from "./Authentication";  // your email/pass login
-import { auth,googleProvider } from "../fireBase";
-import { signInWithPopup } from "firebase/auth";   // 👈 Google login function
 import "../Styles/signup.css";
+import { useAuth } from "../contexts/Authentication";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
+  const { login, loginWithGoogle } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -15,7 +16,7 @@ const Login = () => {
     setError("");
     setSuccess("");
     try {
-      await login(email, password); // email/pass login
+      await login(email, password);
       setSuccess("Logged in successfully 🎉");
       setEmail("");
       setPassword("");
@@ -24,12 +25,11 @@ const Login = () => {
     }
   };
 
-  // 🔹 Google login handler
-  const handleGoogleLogin = async () => {
+  const handleGoogleSubmit = async () => {
     setError("");
     setSuccess("");
     try {
-      const result = await signInWithPopup(auth, googleProvider);
+      const result = await loginWithGoogle();
       setSuccess(`Welcome ${result.user.displayName} 🎉`);
       console.log("Google user:", result.user);
     } catch (err) {
@@ -38,35 +38,65 @@ const Login = () => {
   };
 
   return (
-    <div className="signup-container">
-      <h2>Login</h2>
-      <form className="signup-form" onSubmit={handleSubmit}>
-        <input
-          type="email"
-          placeholder="Enter Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+    <div className="login-page">
+      <div className="signup-container">
+        <h2>Login</h2>
+        <form className="signup-form" onSubmit={handleSubmit}>
+          <input
+            type="email"
+            placeholder="Enter Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
 
-        <input
-          type="password"
-          placeholder="Enter Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+          <input
+            type="password"
+            placeholder="Enter Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
 
-        <button type="submit">Login</button>
+          <button type="submit" className="login-btn">Login</button>
 
-        {/* 🔹 Google Login Button */}
-        <button type="button" onClick={handleGoogleLogin} className="google-btn">
-          Login with Google
+          <div className="divider">
+            <span>OR</span>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleGoogleSubmit}
+            className="google-btn"
+          >
+            <img
+              src="https://www.svgrepo.com/show/355037/google.svg"
+              alt="Google"
+            />
+            Login with Google
+          </button>
+
+          {error && <p className="error-text">{error}</p>}
+          {success && <p className="success-text">{success}</p>}
+        </form>
+        <button
+          type="button"
+          className="guest-btn"
+          onClick={() => (window.location.href = "/visualisation")}
+        >
+          Continue as Guest
         </button>
 
-        {error && <p className="error-text">{error}</p>}
-        {success && <p className="success-text">{success}</p>}
-      </form>
+        <p className="redirect-text">
+          Don’t have an account?{" "}
+          <span
+            className="redirect-link"
+            onClick={() => navigate("/signup")}
+          >
+            Sign Up
+          </span>
+        </p>
+      </div>
     </div>
   );
 };

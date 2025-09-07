@@ -3,12 +3,15 @@ import { getDatabase, ref, onValue } from "firebase/database";
 import { app } from "../fireBase.js"; // your firebaseConfig file
 import axios from "axios";
 import Chart from "./charts.jsx";
+import { useAuth } from "../contexts/Authentication";
+
+// Initialize Realtime Database and get a reference to the service
 
 const db = getDatabase(app);
-
 const DataViewer = () => {
+  const { user, logout } = useAuth();
   const [data, setData] = useState([]);
-const [temperature, setTemperature] = useState("");
+  const [temperature, setTemperature] = useState("");
   const [humidity, setHumidity] = useState("");
   const [response, setResponse] = useState("");
 
@@ -49,12 +52,13 @@ const [temperature, setTemperature] = useState("");
 
   return (
     <div style={{ padding: "20px" }}>
-
-        <div style={{ padding: "20px" }}>
-          <h1>Test Page</h1>
-          <form onSubmit={handleSubmit}>
-            <input
-              type="text"
+      <h1>Welcome, {user ? user.displayName || user.email : "Guest"}</h1>
+      <button onClick={logout}>LogOut</button>
+      <div style={{ padding: "20px" }}>
+        <h1>Test Page</h1>
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
               placeholder="Temperature"
               value={temperature}
               onChange={(e) => setTemperature(e.target.value)}
