@@ -21,30 +21,38 @@ const DataViewer = () => {
 
   function sendSensorLog(e) {
     e.preventDefault();
-    push(ref(db, "testData"), {
+    if (!user) {
+      notify.error("You must be logged in to send data!");
+      return;
+    }
+
+    const userRef = ref(db, `users/${user.uid}/testData`);
+
+    push(userRef, {
       temperature,
       humidity,
       timestamp: Date.now(),
     })
-    .then(() => {
-      setResponse("Data sent successfully!");
-      notify.success("Data sent successfully!");
-      setTemperature("");
-      setHumidity("");
-    })
-    .catch((err) => {
-      setResponse("Error: " + err.message);
-      notify.error("Error: " + err.message);
-    });
+      .then(() => {
+        setResponse("Data sent successfully!");
+        notify.success("Data sent successfully!");
+        setTemperature("");
+        setHumidity("");
+      })
+      .catch((err) => {
+        setResponse("Error: " + err.message);
+        notify.error("Error: " + err.message);
+      });
   }
-  useEffect(() => {
-    const dataRef = ref(db, "testData");
 
-    // Realtime listener
+  useEffect(() => {
+    if (!user) return; // don’t fetch if not logged in
+  
+    const dataRef = ref(db, `users/${user.uid}/testData`);
+  
     const unsubscribe = onValue(dataRef, (snapshot) => {
       const val = snapshot.val();
       if (val) {
-        // Convert object into array of {id, ...values}
         const arr = Object.entries(val).map(([id, item]) => ({
           id,
           ...item,
@@ -54,9 +62,10 @@ const DataViewer = () => {
         setData([]);
       }
     });
-
+  
     return () => unsubscribe();
-  }, []);
+  }, [user]);
+  
 
   return (
     <div className="dashboard-page">
