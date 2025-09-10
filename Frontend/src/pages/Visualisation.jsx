@@ -1,55 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { getDatabase, ref, onValue ,push,set} from "firebase/database";
-import { app } from "../fireBase.js"; // your firebaseConfig file
-import axios from "axios";
-import Chart from "./charts.jsx";
+import { ref, onValue } from "firebase/database";
+import { db } from "../fireBase.js";
 import { useAuth } from "../contexts/Authentication";
-import "../Styles/Visualisation.css";
 import { useNavigate } from "react-router-dom";
-import {notify} from "../Features/toastManager.jsx"
+import { notify } from "../Features/toastManager.jsx";
+import "../Styles/Visualisation.css";
 
-// Initialize Realtime Database and get a reference to the service
+import LiveStatus from "../components/LiveStatus";
+import AnomalyCard from "../components/AnomalyCard";
+import EnvChart from "../components/EnvChart";
+import MotionConfidenceChart from "../components/MotionConfidenceChart";
 
-const db = getDatabase(app);
 const DataViewer = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
-  const [data, setData] = useState([]);
-  const [temperature, setTemperature] = useState("");
-  const [humidity, setHumidity] = useState("");
-  const [response, setResponse] = useState("");
+  const [cradleData, setCradleData] = useState([]);
+  const [latest, setLatest] = useState(null);
 
-  function sendSensorLog(e) {
-    e.preventDefault();
+  useEffect(() => {
     if (!user) {
-      notify.error("You must be logged in to send data!");
+      notify.error("User should log in to monitor the cradle");
+      navigate("/login");
       return;
     }
 
-    const userRef = ref(db, `users/${user.uid}/testData`);
-
-    push(userRef, {
-      temperature,
-      humidity,
-      timestamp: Date.now(),
-    })
-      .then(() => {
-        setResponse("Data sent successfully!");
-        notify.success("Data sent successfully!");
-        setTemperature("");
-        setHumidity("");
-      })
-      .catch((err) => {
-        setResponse("Error: " + err.message);
-        notify.error("Error: " + err.message);
-      });
-  }
-
-  useEffect(() => {
-    if (!user) return; // don’t fetch if not logged in
-  
-    const dataRef = ref(db, `users/${user.uid}/testData`);
-  
+    const dataRef = ref(db, `cradleData`);
     const unsubscribe = onValue(dataRef, (snapshot) => {
       const val = snapshot.val();
       if (val) {
@@ -57,68 +32,66 @@ const DataViewer = () => {
           id,
           ...item,
         }));
-        setData(arr);
+        const sortedArr = arr.sort((a, b) => a.timestamp_unix - b.timestamp_unix);
+        setCradleData(sortedArr);
+        setLatest(sortedArr[sortedArr.length - 1]);
       } else {
-        setData([]);
+        setCradleData([]);
+        setLatest(null);
       }
     });
-  
+
     return () => unsubscribe();
-  }, [user]);
-  
+  }, [user, navigate]);
 
   return (
     <div className="dashboard-page">
-      <div className="dashboard-card">
-        <div className="header-page">
-          <h1 className="welcome-text">
-            Welcome, {user ? user.displayName || user.email : "Guest"}
-          </h1>
-          <div className="header-buts">
-            {user ? (
-              <button onClick={logout} className="logout-btn">
-                Log Out
-              </button>
-            ) : (<>
+      <header className="header-page">
+        <h1 className="welcome-text">
+          Welcome, {user ? user.displayName || user.email : "Guest"}
+        </h1>
+        <div className="header-buts">
+          {user ? (
+            <button onClick={logout} className="logout-btn">
+              Log Out
+            </button>
+          ) : (
+            <>
               <button onClick={() => navigate("/login")} className="logout-btn">
                 Log In
               </button>
               <button onClick={() => navigate("/signUp")} className="logout-btn">
                 Sign Up
-              </button></>
-            )}
-          </div>
+              </button>
+            </>
+          )}
         </div>
-    
-        <div className="test-card">
-          <h2>Test Page</h2>
-          <form onSubmit={sendSensorLog} className="test-form">
-            <input
-              type="text"
-              placeholder="Temperature"
-              value={temperature}
-              onChange={(e) => setTemperature(e.target.value)}
-              required
-            />
-            <input
-              type="text"
-              placeholder="Humidity"
-              value={humidity}
-              onChange={(e) => setHumidity(e.target.value)}
-              required
-            />
-            <button type="submit" className="send-btn">Send</button>
-          </form>
-          {response && <p className="response-msg">{response}</p>}
-        </div>
-      
-        <h2 className="live-data-title">📊 Live Firebase Data</h2>
-        <div className="chart-container">
-          <Chart data={data} />
-        </div>
-      </div>
+      </header>
+
+      <main className="dashboard-card">
+        <h2>📊 Smart Cradle Dashboard</h2>
+
+        <section>
+          <LiveStatus latest={latest} />
+        </section>
+
+        {latest && (
+          <section>
+            <AnomalyCard anomalies={latest.anomalies} />
+          </section>
+        )}
+
+        <section>
+          <h3>🌡 Environment Trends</h3>
+          <EnvChart data={cradleData} />
+        </section>
+
+        <section>
+          <h3>🌀 Motion Confidence</h3>
+          <MotionConfidenceChart data={cradleData} />
+        </section>
+      </main>
     </div>
-    
   );
 };
 
