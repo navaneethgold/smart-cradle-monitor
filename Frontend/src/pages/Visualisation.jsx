@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { getDatabase, ref, onValue } from "firebase/database";
+import { getDatabase, ref, onValue ,push,set} from "firebase/database";
 import { app } from "../fireBase.js"; // your firebaseConfig file
 import axios from "axios";
 import Chart from "./charts.jsx";
 import { useAuth } from "../contexts/Authentication";
 import "../Styles/Visualisation.css";
 import { useNavigate } from "react-router-dom";
+import {notify} from "../Features/toastManager.jsx"
 
 // Initialize Realtime Database and get a reference to the service
 
@@ -18,20 +19,24 @@ const DataViewer = () => {
   const [humidity, setHumidity] = useState("");
   const [response, setResponse] = useState("");
 
-  const handleSubmit = async (e) => {
+  function sendSensorLog(e) {
     e.preventDefault();
-    try {
-      const res = await axios.post("http://localhost:5000/api/test", {
-        temperature,
-        humidity,
-      });
-      setResponse("✅ " + res.data.message + " (ID: " + res.data.id + ")");
+    push(ref(db, "testData"), {
+      temperature,
+      humidity,
+      timestamp: Date.now(),
+    })
+    .then(() => {
+      setResponse("Data sent successfully!");
+      notify.success("Data sent successfully!");
       setTemperature("");
       setHumidity("");
-    } catch (err) {
-      setResponse("❌ Error: " + err.message);
-    }
-  };
+    })
+    .catch((err) => {
+      setResponse("Error: " + err.message);
+      notify.error("Error: " + err.message);
+    });
+  }
   useEffect(() => {
     const dataRef = ref(db, "testData");
 
@@ -78,7 +83,7 @@ const DataViewer = () => {
     
         <div className="test-card">
           <h2>Test Page</h2>
-          <form onSubmit={handleSubmit} className="test-form">
+          <form onSubmit={sendSensorLog} className="test-form">
             <input
               type="text"
               placeholder="Temperature"
