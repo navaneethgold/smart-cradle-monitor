@@ -23,6 +23,7 @@ jobs:
 
       - name: Build React app
         run: npm run build
+        working-directory: ./Frontend
 
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@v2.2.0
