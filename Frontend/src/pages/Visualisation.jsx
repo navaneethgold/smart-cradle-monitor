@@ -11,6 +11,11 @@ import AnomalyCard from "../components/AnomalyCard";
 import EnvChart from "../components/EnvChart";
 import MotionConfidenceChart from "../components/MotionConfidenceChart";
 
+// ✅ Import MUI icons
+import InsertChartIcon from "@mui/icons-material/InsertChart";
+import ThermostatIcon from "@mui/icons-material/Thermostat";
+import TrackChangesIcon from "@mui/icons-material/TrackChanges";
+
 const DataViewer = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
@@ -69,7 +74,10 @@ const DataViewer = () => {
       </header>
 
       <main className="dashboard-card">
-        <h2>📊 Smart Cradle Dashboard</h2>
+        <h2>
+          <InsertChartIcon style={{ verticalAlign: "middle", marginRight: 8 }} />
+          Smart Cradle Dashboard
+        </h2>
 
         <section>
           <LiveStatus latest={latest} />
@@ -82,12 +90,18 @@ const DataViewer = () => {
         )}
 
         <section>
-          <h3>🌡 Environment Trends</h3>
+          <h3>
+            <ThermostatIcon style={{ verticalAlign: "middle", marginRight: 8 }} />
+            Environment Trends
+          </h3>
           <EnvChart data={cradleData} />
         </section>
 
         <section>
-          <h3>🌀 Motion Confidence</h3>
+          <h3>
+            <TrackChangesIcon style={{ verticalAlign: "middle", marginRight: 8 }} />
+            Motion Confidence
+          </h3>
           <MotionConfidenceChart data={cradleData} />
         </section>
       </main>

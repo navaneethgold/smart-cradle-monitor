@@ -1,24 +1,67 @@
 import React from "react";
-
+import HourglassEmptyIcon from "@mui/icons-material/HourglassEmpty";
+import ThermostatIcon from "@mui/icons-material/Thermostat";
+import OpacityIcon from "@mui/icons-material/Opacity";
+import SensorsIcon from "@mui/icons-material/Sensors";
+import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+import "../Styles/liveStatus.css";
 export default function LiveStatus({ latest }) {
-  if (!latest) return <p>⏳ Waiting for data...</p>;
+  if (!latest)
+    return (
+      <div className="status-grid">
+        <div className="status-card waiting">
+          <div className="icon">
+            <HourglassEmptyIcon fontSize="inherit" />
+          </div>
+          <h3>Live Status</h3>
+          <div className="status" style={{ color: "gray" }}>
+            Waiting for data...
+          </div>
+        </div>
+      </div>
+    );
 
   const { environment, motion, anomalies } = latest;
 
   return (
-    <div className="card">
-      <h2>🔴 Live Status</h2>
-      <p>🌡 Temperature: <b>{environment?.temperature ?? "--"} °C</b></p>
-      <p>💧 Humidity: <b>{environment?.humidity ?? "--"} %</b></p>
-      <p>📡 Motion: <b>{motion?.state ?? "Unknown"}</b></p>
-      <p>
-        ⚠️ Anomaly:{" "}
-        {anomalies?.overall ? (
-          <span style={{ color: "red", fontWeight: "bold" }}>YES</span>
-        ) : (
-          <span style={{ color: "green" }}>No</span>
-        )}
-      </p>
+    <div className="status-grid">
+      <div className="status-card">
+        <div className="icon">
+          <ThermostatIcon fontSize="inherit" />
+        </div>
+        <h3>Temperature</h3>
+        <div className="status">{environment?.temperature ?? "--"} °C</div>
+      </div>
+
+      <div className="status-card">
+        <div className="icon">
+          <OpacityIcon fontSize="inherit" />
+        </div>
+        <h3>Humidity</h3>
+        <div className="status">{environment?.humidity ?? "--"} %</div>
+      </div>
+
+      <div className="status-card">
+        <div className="icon">
+          <SensorsIcon fontSize="inherit" />
+        </div>
+        <h3>Motion</h3>
+        <div className="status">{motion?.state ?? "Unknown"}</div>
+      </div>
+
+      <div
+        className={`status-card ${
+          anomalies?.overall ? "detected" : "normal"
+        }`}
+      >
+        <div className="icon">
+          <ReportProblemIcon fontSize="inherit" />
+        </div>
+        <h3>Anomaly</h3>
+        <div className="status">
+          {anomalies?.overall ? "YES" : "No"}
+        </div>
+      </div>
     </div>
   );
 }
