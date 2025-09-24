@@ -4,6 +4,8 @@ import ThermostatIcon from "@mui/icons-material/Thermostat";
 import OpacityIcon from "@mui/icons-material/Opacity";
 import SensorsIcon from "@mui/icons-material/Sensors";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
+import GraphicEqIcon from "@mui/icons-material/GraphicEq";
+
 import "../Styles/liveStatus.css";
 export default function LiveStatus({ latest }) {
   if (!latest)
@@ -21,7 +23,7 @@ export default function LiveStatus({ latest }) {
       </div>
     );
 
-  const { environment, motion, anomalies } = latest;
+  const { environment, motion, sound } = latest;
 
   return (
     <div className="status-grid">
@@ -49,18 +51,12 @@ export default function LiveStatus({ latest }) {
         <div className="status">{motion?.state ?? "Unknown"}</div>
       </div>
 
-      <div
-        className={`status-card ${
-          anomalies?.overall ? "detected" : "normal"
-        }`}
-      >
+      <div className="status-card">
         <div className="icon">
-          <ReportProblemIcon fontSize="inherit" />
+          <GraphicEqIcon fontSize="inherit" />
         </div>
-        <h3>Anomaly</h3>
-        <div className="status">
-          {anomalies?.overall ? "YES" : "No"}
-        </div>
+        <h3>Audio Level</h3>
+        <div className="status">{sound?.level ?? "--"} dB</div>
       </div>
     </div>
   );

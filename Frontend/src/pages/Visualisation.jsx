@@ -79,6 +79,8 @@ const DataViewer = () => {
           Smart Cradle Dashboard
         </h2>
 
+        <p>Recent most logged data:</p> <br />
+
         <section>
           <LiveStatus latest={latest} />
         </section>

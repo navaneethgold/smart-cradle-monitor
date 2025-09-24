@@ -48,3 +48,53 @@
 .status-card.waiting {
   border-top: 4px solid #757575; /* gray */
 }
+
+.overall-anomaly-banner {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.overall-anomaly-banner.detected {
+  background-color: #ffe0e0;
+  color: #b00020;
+}
+
+.overall-anomaly-banner.normal {
+  background-color: #e0ffe3;
+  color: #007f3d;
+}
+
+.overall-anomaly-banner .icon {
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.online-banner {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.online-banner.online {
+  background-color: #e0ffe3;
+  color: #007f3d;
+}
+
+.online-banner.offline {
+  background-color: #ffe0e0;
+  color: #b00020;
+}
+
+.online-banner .icon {
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+}
