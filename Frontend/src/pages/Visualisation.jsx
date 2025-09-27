@@ -28,6 +28,7 @@ const DataViewer = () => {
       navigate("/login");
       return;
     }
+    
 
     const dataRef = ref(db, `cradleData`);
     const unsubscribe = onValue(dataRef, (snapshot) => {
@@ -40,6 +41,9 @@ const DataViewer = () => {
         const sortedArr = arr.sort((a, b) => a.timestamp_unix - b.timestamp_unix);
         setCradleData(sortedArr);
         setLatest(sortedArr[sortedArr.length - 1]);
+        if(sortedArr[sortedArr.length - 1].anomalies.overall){
+          notify.error("Anomaly Detected! Please check the dashboard for more details.");
+        }
       } else {
         setCradleData([]);
         setLatest(null);
@@ -53,7 +57,7 @@ const DataViewer = () => {
     <div className="dashboard-page">
       <header className="header-page">
         <h1 className="welcome-text">
-          Welcome, {user ? user.displayName || user.email : "Guest"}
+          Welcome, <b>{user ? user.displayName || user.email : "Guest"}</b>
         </h1>
         <div className="header-buts">
           {user ? (
