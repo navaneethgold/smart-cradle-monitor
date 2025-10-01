@@ -13,7 +13,7 @@ The **Smart Cradle** is an IoT-powered child monitoring and safety system design
 Our system continuously monitors the infant’s environment and sends alerts to caregivers in case of unsafe conditions such as:
 - Abnormal shaking/tilting  
 - Loud crying or continuous crying  
-- Unfavorable environmental conditions (temperature, humidity, Motion, air quality)  
+- Unfavorable environmental conditions (temperature, humidity, motion, air quality)  
 
 This helps parents and caregivers **reduce risks like overheating, unattended crying, and unsafe rocking** while ensuring a safer and more comfortable environment for infants.  
 
@@ -36,15 +36,68 @@ This helps parents and caregivers **reduce risks like overheating, unattended cr
 
 ## 🛠️ Hardware Components
 
-| Component      | Purpose                                                                 |
-|----------------|-------------------------------------------------------------------------|
-| **ESP32**      | Main microcontroller with Wi-Fi, processes sensor data & triggers alerts |
-| **MPU6050**    | Detects motion, tilt, and vibration (cradle movements)                  |
-| **DHT11**      | Monitors temperature and humidity                                       |
-| **KY-037**     | Detects high-volume crying/sounds                                       |
-| **Buzzer / LED** | Provides local feedback (alerts)                                       |
-| **Breadboard** | Connects components for prototyping                                     |
+| Component          | Purpose                                                                 |
+|--------------------|-------------------------------------------------------------------------|
+| **ESP32**          | Main microcontroller with Wi-Fi, processes sensor data & triggers alerts |
+| **MPU6050**        | Detects motion, tilt, and vibration (cradle movements)                  |
+| **DHT11**          | Monitors temperature and humidity                                       |
+| **KY-037**         | Detects high-volume crying/sounds                                       |
+| **INMP441**        | I²S microphone for accurate sound capture                               |
+| **Buzzer / LED**   | Provides local feedback (alerts)                                        |
+| **Breadboard**     | Connects components for prototyping                                     |
 | **Power Supply & Wires** | Powers the system and connects components                     |
+
+---
+
+## 🔌 Wiring Connections
+
+### Power Rails
+| From (ESP32) | To (Breadboard) |
+|--------------|-----------------|
+| 3V3          | +V rail         |
+| GND          | GND rail        |
+
+---
+
+### MPU6050 (I²C Accelerometer + Gyro)
+| Pin (MPU6050) | Connected To          | Notes |
+|---------------|-----------------------|-------|
+| VCC           | 3V3                   | Power |
+| GND           | GND                   | Ground |
+| SDA           | GPIO21 (SDA) on ESP32 | I²C Data |
+| SCL           | GPIO22 (SCL) on ESP32 | I²C Clock |
+| AD0 *(opt.)*  | GND                   | Keeps default I²C address (0x68) |
+| INT *(opt.)*  | Not connected         | Use free GPIO if needed |
+
+---
+
+### DHT11 (Temperature + Humidity)
+| Pin (DHT11) | Connected To | Notes |
+|-------------|--------------|-------|
+| VCC         | 3V3          | Works on 3–5V, 3.3V is fine |
+| GND         | GND          | Ground |
+| DATA        | GPIO4        | Matches `#define DHTPIN 4` in code |
+| —           | 3V3 (via 4.7kΩ pull-up) | Pull-up resistor between DATA and 3V3 |
+
+---
+
+### LED Indicator
+| Pin (LED)   | Connected To        | Notes |
+|-------------|---------------------|-------|
+| Anode (+)   | GPIO2 (via 220Ω R)  | Series resistor required |
+| Cathode (–) | GND                 | Ground |
+
+---
+
+### INMP441 (I²S Microphone)
+| Pin (INMP441) | Connected To | Notes |
+|---------------|--------------|-------|
+| VDD           | 3V3          | **Never use 5V** |
+| GND           | GND          | Ground |
+| L/R (LR)      | GND          | Left channel / Mono |
+| WS (LRCLK)    | GPIO25       | I²S Word Select |
+| SCK (BCLK)    | GPIO26       | I²S Bit Clock |
+| SD (DOUT)     | GPIO33       | I²S Data Out |
 
 ---
 
@@ -63,9 +116,11 @@ This helps parents and caregivers **reduce risks like overheating, unattended cr
 
 ---
 
+## 📐 Circuit & Prototype
+
 Here is the circuit diagram of the Smart Cradle system:  
 
-![Circuit Diagram](Frontend/src/assets/wokwi.jpg)
+![Circuit Diagram](Frontend/src/assets/wokwi.jpg)  
 ![Prototype](Frontend/src/assets/prototype.jpg)
 
 ---
@@ -83,9 +138,8 @@ Here is the circuit diagram of the Smart Cradle system:
 ---
 
 ## 👨‍💻 Team
-- **Sri Charan A**
+- **Sri Charan A**  
 - **Navaneeth A B S**  
 - **Madhavan S K R**  
 
 ---
-
