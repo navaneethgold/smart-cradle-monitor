@@ -5,6 +5,7 @@ import OpacityIcon from "@mui/icons-material/Opacity";
 import SensorsIcon from "@mui/icons-material/Sensors";
 import ReportProblemIcon from "@mui/icons-material/ReportProblem";
 import GraphicEqIcon from "@mui/icons-material/GraphicEq";
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 
 import "../Styles/liveStatus.css";
 export default function LiveStatus({ latest }) {
@@ -26,6 +27,8 @@ export default function LiveStatus({ latest }) {
   const { environment, motion, sound } = latest;
 
   return (
+    <>
+    <h3 className="heade"><FiberManualRecordIcon style={{ color: "green" }} /> Live Status</h3>
     <div className="status-grid">
       <div className="status-card">
         <div className="icon">
@@ -59,5 +62,6 @@ export default function LiveStatus({ latest }) {
         <div className="status">{sound?.level ?? "--"} dB</div>
       </div>
     </div>
+    </>
   );
 }
