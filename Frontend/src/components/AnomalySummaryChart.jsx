@@ -41,7 +41,7 @@ const AnomalySummaryChart = ({ data }) => {
     const colorMap = {
       motion: "rgba(255, 99, 132, 0.6)",      // Red
       temperature: "rgba(54, 162, 235, 0.6)", // Blue
-      cry: "rgba(255, 206, 86, 0.6)",         // Yellow
+      noise: "rgba(255, 206, 86, 0.6)",         // Yellow
       overall: "rgba(153, 102, 255, 0.6)",    // Purple
     };
     
