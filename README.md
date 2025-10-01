@@ -41,7 +41,6 @@ This helps parents and caregivers **reduce risks like overheating, unattended cr
 | **ESP32**          | Main microcontroller with Wi-Fi, processes sensor data & triggers alerts |
 | **MPU6050**        | Detects motion, tilt, and vibration (cradle movements)                  |
 | **DHT11**          | Monitors temperature and humidity                                       |
-| **KY-037**         | Detects high-volume crying/sounds                                       |
 | **INMP441**        | I²S microphone for accurate sound capture                               |
 | **Buzzer / LED**   | Provides local feedback (alerts)                                        |
 | **Breadboard**     | Connects components for prototyping                                     |
@@ -126,14 +125,18 @@ Here is the circuit diagram of the Smart Cradle system:
 ---
 
 ## 📊 Budget (Approx.)
-| Item               | Cost (INR) |
-|--------------------|-----------|
-| ESP32              | ₹950      |
-| MPU6050            | ₹160      |
-| DHT11              | ₹90       |
-| KY-037 Sound Sensor | ₹150      |
-| Others (Wires, LED, Breadboard, Buzzer) | ₹260 |
-| **Total**          | **₹1210** |
+
+| Item                          | Cost (INR) |
+|-------------------------------|-----------|
+| ESP32                         | ₹589      |
+| MPU6050                       | ₹165      |
+| DHT11                         | ₹118      |
+| 3.7V Rechargeable Battery     | ₹90       |
+| TP4056 Charging Module        | ₹15       |
+| INMP441 Microphone            | ₹334      |
+| RGB LED                       | ₹10       |
+| Others (Wires, Breadboard, Buzzer) | ₹260 |
+| **Total**                     | **₹1581** |
 
 ---
 
