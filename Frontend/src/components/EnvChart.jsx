@@ -1,5 +1,14 @@
 import React from "react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 export default function EnvChart({ data }) {
   const chartData = data.map((sample) => ({
@@ -16,8 +25,20 @@ export default function EnvChart({ data }) {
         <YAxis />
         <Tooltip />
         <Legend />
-        <Line type="monotone" dataKey="temp" stroke="#ff7300" name="Temperature (°C)" />
-        <Line type="monotone" dataKey="humidity" stroke="#387908" name="Humidity (%)" />
+        <Line
+          type="monotone"
+          dataKey="temp"
+          stroke="#ff7300"
+          name="Temperature (°C)"
+          dot={false}
+        />
+        <Line
+          type="monotone"
+          dataKey="humidity"
+          stroke="#387908"
+          name="Humidity (%)"
+          dot={false}
+        />
       </LineChart>
     </ResponsiveContainer>
   );

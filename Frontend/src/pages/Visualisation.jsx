@@ -7,10 +7,9 @@ import { notify } from "../Features/toastManager.jsx";
 import "../Styles/Visualisation.css";
 import AnomalySummaryChart from "../components/AnomalySummaryChart.jsx";
 import BoltIcon from "@mui/icons-material/Bolt";
-
+import icon from "../assets/icon.png"
 
 import LiveStatus from "../components/LiveStatus";
-import AnomalyCard from "../components/AnomalyCard";
 import EnvChart from "../components/EnvChart";
 import MotionConfidenceChart from "../components/MotionConfidenceChart";
 
@@ -93,8 +92,14 @@ const DataViewer = () => {
     <div className="dashboard-page">
       <header className={`header-page ${headerState}`}>
         <h1 className="welcome-text">
+          <img 
+            src={icon} 
+            alt="Cradle Icon" 
+            className="welcome-icon" 
+          />
           Welcome, <b>{user ? user.displayName || user.email : "Guest"}</b>
         </h1>
+
         <div className="header-buts">
           {user ? (
             <button onClick={logout} className="logout-btn">

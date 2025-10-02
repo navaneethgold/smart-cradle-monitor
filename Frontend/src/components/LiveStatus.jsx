@@ -59,7 +59,7 @@ export default function LiveStatus({ latest }) {
           <GraphicEqIcon fontSize="inherit" />
         </div>
         <h3>Audio Level</h3>
-        <div className="status">{sound?.level ?? "--"} dB</div>
+        <div className="status">{sound?.level ?? "--"} units</div>
       </div>
     </div>
     </>

@@ -87,13 +87,6 @@ const Login = () => {
           {error && <p className="error-text">{error}</p>}
           {success && <p className="success-text">{success}</p>}
         </form>
-        <button
-          type="button"
-          className="guest-btn"
-          onClick={() => navigate("/visualisation")}
-        >
-          Continue as Guest
-        </button>
 
         <p className="redirect-text">
           Don’t have an account?{" "}
